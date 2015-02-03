@@ -7,8 +7,10 @@
  * @param {string} name     The item's name.
  * @property {string} name
  */
+function Item (name){
+  this.name = name;
 
-
+}
 /**
  * Class => Weapon(name, damage)
  * -----------------------------
@@ -25,13 +27,19 @@
  * @property {number} damage
  */
 
-
+function Weapon (name, damage){
+  this.damage = damage;
+  Item.call(this, name);
+}
 /**
  * Weapon Extends Item Class
  * -----------------------------
  */
-
-
+Weapon.prototype = Object.create(Item.prototype,{
+  constructor : {
+    value : Item
+  }
+});
 
 /**
  * Class => Food(name, energy)
@@ -48,13 +56,20 @@
  * @param {number} energy     The energy the food provides.
  * @property {number} energy
  */
-
+function Food (name, energy){
+  this.energy = energy;
+  Item.call(this ,name);
+}
 
 /**
  * Food Extends Item Class
  * -----------------------------
  */
-
+Food.prototype = Object.create(Item.prototype,{
+  constructor : {
+    value : Item
+  }
+});
 
 
 /**
@@ -78,7 +93,13 @@
  * @property {method} getPack              Returns private variable `pack`.
  * @property {method} getMaxHealth         Returns private variable `maxHealth`.
  */
-
+function Player (name, health, strength, speed){
+  this.name = name;
+  this.health = health;
+  this.strength = strength;
+  this.speed = speed;
+  this.isAlive = true;
+}
 
 /**
  * Player Class Method => checkPack()
