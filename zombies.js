@@ -98,9 +98,24 @@ function Player (name, health, strength, speed){
   this.health = health;
   this.strength = strength;
   this.speed = speed;
+  var pack = [];
+  var maxHealth = health;
   this.isAlive = true;
-}
+  this.equipped = false;
+  this.getPack =function (){
+  return pack;
+  // this function acceses the variable pack's empty array and returns it so we can access it in our checkpack prototype.
+  };
+  this.getMaxHealth = function(){
+    return health;
+  //this allows us to access out max health variable and use it in later prototype functions]
 
+  };
+  //this.getMaxHealth = maxHealth;
+}
+Player.prototype.getMaxHealth = function (){
+  return health;
+};
 /**
  * Player Class Method => checkPack()
  * -----------------------------
@@ -112,7 +127,9 @@ function Player (name, health, strength, speed){
  *
  * @name checkPack
  */
-
+Player.prototype.checkPack = function(){
+  return console.log(this.getPack);
+};
 
 /**
  * Player Class Method => takeItem(item)
@@ -131,8 +148,16 @@ function Player (name, health, strength, speed){
  * @param {Item/Weapon/Food} item   The item to take.
  * @return {boolean} true/false     Whether player was able to store item in pack.
  */
-
-
+Player.prototype.takeItem = function (item){
+  var pack = this.getPack();
+  if(pack.length >= 3){
+    console.log("Pack is full. cannot add more items." + item);
+    return false;
+  }else{
+    pack.push(item);
+    return true;
+  }
+};
 /**
  * Player Class Method => discardItem(item)
  * -----------------------------
@@ -158,7 +183,19 @@ function Player (name, health, strength, speed){
  * @param {Item/Weapon/Food} item   The item to discard.
  * @return {boolean} true/false     Whether player was able to remove item from pack.
  */
+Player.prototype.discardItem = function (item){
+  var pack = this.getPack();
+  var itemDiscard = pack.indexOf(item);
 
+  if (itemDiscard !== -1){
+    pack.splice(itemDiscard, 1);
+    console.log("item hs been discarded");
+  return true;
+  }else{
+    console.log("item is not in players pack.");
+    return false;
+  }
+};
 
 /**
  * Player Class Method => equip(itemToEquip)
@@ -179,7 +216,12 @@ function Player (name, health, strength, speed){
  * @name equip
  * @param {Weapon} itemToEquip  The weapon item to equip.
  */
+Player.prototype.equip = function (itemToEquip){
+  var pack = this.getPack();
+  
+  if (itemToEquip instanceof weapon){}
 
+};
 
 /**
  * Player Class Method => eat(itemToEat)
