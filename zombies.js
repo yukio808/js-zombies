@@ -107,7 +107,7 @@ function Player (name, health, strength, speed){
   // this function acceses the variable pack's empty array and returns it so we can access it in our checkpack prototype.
   };
   this.getMaxHealth = function(){
-    return health;
+    return maxHealth;
   //this allows us to access out max health variable and use it in later prototype functions]
 
   };
@@ -151,7 +151,7 @@ Player.prototype.checkPack = function(){
 Player.prototype.takeItem = function (item){
   var pack = this.getPack();
   if(pack.length >= 3){
-    console.log("Pack is full. cannot add more items." + item);
+    console.log("Pack is full. cannot add more items such as" + item.name);
     return false;
   }else{
     pack.push(item);
@@ -189,10 +189,10 @@ Player.prototype.discardItem = function (item){
 
   if (itemDiscard !== -1){
     pack.splice(itemDiscard, 1);
-    console.log("item hs been discarded");
+    console.log(item.name + "item hs been discarded");
   return true;
   }else{
-    console.log("item is not in players pack.");
+    console.log(item.name + "item is not in players pack.");
     return false;
   }
 };
@@ -218,8 +218,22 @@ Player.prototype.discardItem = function (item){
  */
 Player.prototype.equip = function (itemToEquip){
   var pack = this.getPack();
-  
-  if (itemToEquip instanceof weapon){}
+
+  if (itemToEquip instanceof Weapon === false){
+    return false;
+  }
+    
+  if (pack.indexOf(itemToEquip) === -1){
+  return false; 
+  }
+  if(this.equipped === false){
+    this.equipped = itemToEquip;
+    this.discardItem(itemToEquip);
+    return true;
+  }
+  pack.push(this.equipped);
+  this.equipped = itemToEquip;
+  this.discardItem(itemToEquip);
 
 };
 
@@ -241,7 +255,20 @@ Player.prototype.equip = function (itemToEquip){
  * @name eat
  * @param {Food} itemToEat  The food item to eat.
  */
-
+Player.prototype.eat = function(itemToEat){
+  var pack = this.getPack();
+  if (itemToEat instanceof Food === false){
+    return false;
+  }
+  if (pack.indexOf(itemToEat) === -1){
+    return false;
+  }
+  this.discardItem(itemToEat);
+  this.health += itemToEat.energy;
+  if(this.health > this.getMaxHealth()){
+    this.health = this.getMaxHealth();
+  }
+};
 
 /**
  * Player Class Method => useItem(item)
@@ -255,7 +282,13 @@ Player.prototype.equip = function (itemToEquip){
  * @name useItem
  * @param {Item/Weapon/Food} item   The item to use.
  */
-
+Player.prototype.useItem = function(item){
+  if(item instanceof Weapon){
+    return this.equip(item);
+  }else if (item instanceof Food){
+    return this.eat(item);
+  }
+};
 
 /**
  * Player Class Method => equippedWith()
